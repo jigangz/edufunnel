@@ -19,7 +19,16 @@ app.use("/api/health", healthRouter);
 app.use("/api/funnel", funnelRouter);
 
 // Boot
-initDb();
-app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
-});
+async function start() {
+  try {
+    await initDb();
+    app.listen(PORT, () => {
+      console.log(`API running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start:", err);
+    process.exit(1);
+  }
+}
+
+start();
