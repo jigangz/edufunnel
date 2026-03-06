@@ -1,30 +1,28 @@
-import { Pool } from "pg";
-import dotenv from "dotenv";
+import Database from "better-sqlite3";
+import path from "path";
 
-dotenv.config();
+// Use file-based SQLite in dev, /tmp in production (serverless)
+const dbPath =
+  process.env.NODE_ENV === "production"
+    ? "/tmp/edufunnel.db"
+    : path.join(__dirname, "../edufunnel.db");
 
-// Supabase session pooler connection
-const pool = new Pool({
-  connectionString:
-    process.env.DATABASE_URL ||
-    "postgresql://postgres.gxgogveyzwgkpideamjf:qqXO9BOko60NYdVf@aws-1-us-east-2.pooler.supabase.com:5432/postgres",
-  ssl: { rejectUnauthorized: false },
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-});
+const db = new Database(dbPath);
+
+// Enable WAL mode for better concurrent read performance
+db.pragma("journal_mode = WAL");
 
 // Create the funnel_events table if it doesn't exist
-export async function initDb() {
-  await pool.query(`
+export function initDb() {
+  db.exec(`
     CREATE TABLE IF NOT EXISTS funnel_events (
-      id SERIAL PRIMARY KEY,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       step TEXT NOT NULL,
       session_id TEXT NOT NULL,
-      created_at TIMESTAMPTZ DEFAULT NOW()
+      created_at TEXT DEFAULT (datetime('now'))
     )
   `);
-  console.log("DB ready — funnel_events table OK");
+  console.log("SQLite ready — funnel_events table OK");
 }
 
-export default pool;
+export default db;
