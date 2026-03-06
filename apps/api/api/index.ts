@@ -10,6 +10,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Root endpoint
+app.get("/", (_req, res) => {
+  res.json({
+    name: "EduFunnel API",
+    version: "1.0.0",
+    endpoints: {
+      health: "GET /api/health",
+      trackEvent: "POST /api/funnel/event",
+      funnelStats: "GET /api/funnel/stats",
+    },
+  });
+});
+
 app.use("/api/health", healthRouter);
 app.use("/api/funnel", funnelRouter);
 
