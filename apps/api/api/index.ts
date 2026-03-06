@@ -10,8 +10,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Root endpoint
+// Root endpoint (Vercel rewrites / → /api, so Express sees /api)
 app.get("/", (_req, res) => {
+  res.json({
+    name: "EduFunnel API",
+    version: "1.0.0",
+    endpoints: {
+      health: "GET /api/health",
+      trackEvent: "POST /api/funnel/event",
+      funnelStats: "GET /api/funnel/stats",
+    },
+  });
+});
+app.get("/api", (_req, res) => {
   res.json({
     name: "EduFunnel API",
     version: "1.0.0",
