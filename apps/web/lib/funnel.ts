@@ -1,7 +1,8 @@
 // Funnel event tracking — calls the Express API
 // Steps: page_view → cta_click → register → course_select
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+// API routes are on the same origin (Next.js API routes)
+const API_URL = "";
 
 type FunnelStep = "page_view" | "cta_click" | "register" | "course_select";
 
