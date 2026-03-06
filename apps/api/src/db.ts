@@ -6,11 +6,11 @@ dotenv.config();
 const pool = new Pool({
   connectionString:
     process.env.DATABASE_URL ||
-    "postgresql://postgres.xknzaqbchlnqsfcrwumb:5sfVlaWVZKN0cxuA@aws-0-us-west-2.pooler.supabase.com:5432/postgres",
+    "postgresql://postgres.xknzaqbchlnqsfcrwumb:5sfVlaWVZKN0cxuA@aws-0-us-west-2.pooler.supabase.com:6543/postgres",
   ssl: { rejectUnauthorized: false },
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  max: 3,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 10000,
 });
 
 // Create the funnel_events table if it doesn't exist
